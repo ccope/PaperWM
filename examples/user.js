@@ -10,23 +10,22 @@ var Shell = imports.gi.Shell;
 var Extension, Me, Tiling, Utils, App, Keybindings, Examples;
 
 function init() {
-    // Runs _only_ once on startup
+  // Runs _only_ once on startup
 
-    // Initialize extension imports here to make gnome-shell-reload work
-    Extension = imports.misc.extensionUtils.getCurrentExtension();
-    Me = Extension.imports.user;
-    Tiling = Extension.imports.tiling;
-    Utils = Extension.imports.utils;
-    Keybindings = Extension.imports.keybindings;
-    Examples = Extension.imports.examples;
-    App = Extension.imports.app;
+  // Initialize extension imports here to make gnome-shell-reload work
+  Extension = imports.misc.extensionUtils.getCurrentExtension();
+  Me = Extension.imports.user;
+  Tiling = Extension.imports.tiling;
+  Utils = Extension.imports.utils;
+  Keybindings = Extension.imports.keybindings;
+  Examples = Extension.imports.examples;
+  App = Extension.imports.app;
 }
 
 function enable() {
-    // Runs on extension reloads, eg. when unlocking the session
+  // Runs on extension reloads, eg. when unlocking the session
 }
 
 function disable() {
-    // Runs on extension reloads eg. when locking the session (`<super>L).
+  // Runs on extension reloads eg. when locking the session (`<super>L).
 }
-

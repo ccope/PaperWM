@@ -1,20 +1,19 @@
 .paper-mm-selected-window {
-    border: 10px cyan; /* if we need to operate in pre-scaled dimension */
-    border-radius: 5px;
+  border: 10px cyan; /* if we need to operate in pre-scaled dimension */
+  border-radius: 5px;
 }
 
-
 .workspace-icon-button {
-    -st-icon-style: symbolic;
-    border: none;
-    border-radius: 8px;
-    padding: 8px;
+  -st-icon-style: symbolic;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
 }
 
 .workspace-icon-button StIcon {
-    icon-size: 16px;
+  icon-size: 16px;
 }
 
 .paperwm-selection {
-    border-radius: 8px;
+  border-radius: 8px;
 }

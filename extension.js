@@ -1,6 +1,6 @@
 // polyfill workspace_manager that was introduced in 3.30 (must happen before modules are imported)
 if (!global.workspace_manager) {
-    global.workspace_manager = global.screen;
+  global.workspace_manager = global.screen;
 }
 
 /**
@@ -31,45 +31,55 @@ if (!global.workspace_manager) {
      - gestures is responsible for 3-finger swiping (only works in wayland).
  */
 var modules = [
-    'tiling', 'navigator', 'keybindings', 'scratch', 'liveAltTab', 'utils',
-    'stackoverlay', 'app', 'kludges', 'topbar', 'settings','gestures'
+  "tiling",
+  "navigator",
+  "keybindings",
+  "scratch",
+  "liveAltTab",
+  "utils",
+  "stackoverlay",
+  "app",
+  "kludges",
+  "topbar",
+  "settings",
+  "gestures",
 ];
 
 /**
   Tell the modules to run init, enable or disable
  */
 function run(method) {
-    for (let name of modules) {
-        // Bail if there's an error in our own modules
-        if (!safeCall(name, method))
-            return false;
-    }
+  for (let name of modules) {
+    // Bail if there's an error in our own modules
+    if (!safeCall(name, method)) return false;
+  }
 
-    if (hasUserConfigFile()) {
-        safeCall('user', method);
-    }
+  if (hasUserConfigFile()) {
+    safeCall("user", method);
+  }
 
-    return true;
+  return true;
 }
 
 function safeCall(name, method) {
-    try {
-        print("#paperwm", `${method} ${name}`);
-        let module = Extension.imports[name];
-        module && module[method] && module[method].call(module, errorNotification);
-        return true;
-    } catch(e) {
-        print("#paperwm", `${name} failed ${method}`);
-        print(`JS ERROR: ${e}\n${e.stack}`);
-        errorNotification(
-            "PaperWM",
-            `Error occured in ${name} @${method}:\n\n${e.message}`,
-            e.stack);
-        return false;
-    }
+  try {
+    print("#paperwm", `${method} ${name}`);
+    let module = Extension.imports[name];
+    module && module[method] && module[method].call(module, errorNotification);
+    return true;
+  } catch (e) {
+    print("#paperwm", `${name} failed ${method}`);
+    print(`JS ERROR: ${e}\n${e.stack}`);
+    errorNotification(
+      "PaperWM",
+      `Error occured in ${name} @${method}:\n\n${e.message}`,
+      e.stack
+    );
+    return false;
+  }
 }
 
-var SESSIONID = ""+(new Date().getTime());
+var SESSIONID = "" + new Date().getTime();
 
 /**
  * The extension sometimes go through multiple init -> enable -> disable
@@ -80,106 +90,115 @@ var enabled = false;
 
 var Extension, convenience;
 function init() {
-    SESSIONID += "#";
-    log(`#paperwm init: ${SESSIONID}`);
+  SESSIONID += "#";
+  log(`#paperwm init: ${SESSIONID}`);
 
-    // var Gio = imports.gi.Gio;
-    // let extfile = Gio.file_new_for_path( Extension.imports.extension.__file__);
-    Extension = imports.misc.extensionUtils.getCurrentExtension();
-    convenience = Extension.imports.convenience;
+  // var Gio = imports.gi.Gio;
+  // let extfile = Gio.file_new_for_path( Extension.imports.extension.__file__);
+  Extension = imports.misc.extensionUtils.getCurrentExtension();
+  convenience = Extension.imports.convenience;
 
-    if(initRun) {
-        log(`#startup Reinitialized against our will! Skip adding bindings again to not cause trouble.`);
-        return;
-    }
+  if (initRun) {
+    log(
+      `#startup Reinitialized against our will! Skip adding bindings again to not cause trouble.`
+    );
+    return;
+  }
 
-    initUserConfig();
+  initUserConfig();
 
-    if (run('init'))
-        initRun = true;
+  if (run("init")) initRun = true;
 }
 
 function enable() {
-    log(`#paperwm enable ${SESSIONID}`);
-    if (enabled) {
-        log('enable called without calling disable');
-        return;
-    }
+  log(`#paperwm enable ${SESSIONID}`);
+  if (enabled) {
+    log("enable called without calling disable");
+    return;
+  }
 
-    if (run('enable'))
-        enabled = true;
+  if (run("enable")) enabled = true;
 }
 
 function disable() {
-    log(`#paperwm disable ${SESSIONID}`);
-    if (!enabled) {
-        log('disable called without calling enable');
-        return;
-    }
+  log(`#paperwm disable ${SESSIONID}`);
+  if (!enabled) {
+    log("disable called without calling enable");
+    return;
+  }
 
-    if (run('disable'))
-        enabled = false;
+  if (run("disable")) enabled = false;
 }
-
 
 var Gio = imports.gi.Gio;
 var GLib = imports.gi.GLib;
 var Main = imports.ui.main;
 
 function getConfigDir() {
-    return Gio.file_new_for_path(GLib.get_user_config_dir() + '/paperwm');
+  return Gio.file_new_for_path(GLib.get_user_config_dir() + "/paperwm");
 }
 
 function hasUserConfigFile() {
-    return getConfigDir().get_child("user.js").query_exists(null);
+  return getConfigDir().get_child("user.js").query_exists(null);
 }
 
 function installConfig() {
-    print("#rc", "Installing config");
-    const configDir = getConfigDir();
-    configDir.make_directory_with_parents(null);
+  print("#rc", "Installing config");
+  const configDir = getConfigDir();
+  configDir.make_directory_with_parents(null);
 
-    // We copy metadata.json to the config directory so gnome-shell-mode
-    // know which extension the files belong to (ideally we'd symlink, but
-    // that trips up the importer: Extension.imports.<complete> in
-    // gnome-shell-mode crashes gnome-shell..)
-    const metadata = Extension.dir.get_child("metadata.json");
-    metadata.copy(configDir.get_child("metadata.json"), Gio.FileCopyFlags.NONE, null, null);
+  // We copy metadata.json to the config directory so gnome-shell-mode
+  // know which extension the files belong to (ideally we'd symlink, but
+  // that trips up the importer: Extension.imports.<complete> in
+  // gnome-shell-mode crashes gnome-shell..)
+  const metadata = Extension.dir.get_child("metadata.json");
+  metadata.copy(
+    configDir.get_child("metadata.json"),
+    Gio.FileCopyFlags.NONE,
+    null,
+    null
+  );
 
-    // Copy the user.js template to the config directory
-    const user = Extension.dir.get_child("examples/user.js");
-    user.copy(configDir.get_child("user.js"), Gio.FileCopyFlags.NONE, null, null);
+  // Copy the user.js template to the config directory
+  const user = Extension.dir.get_child("examples/user.js");
+  user.copy(configDir.get_child("user.js"), Gio.FileCopyFlags.NONE, null, null);
 
-    const settings = convenience.getSettings();
-    settings.set_boolean("has-installed-config-template", true);
+  const settings = convenience.getSettings();
+  settings.set_boolean("has-installed-config-template", true);
 }
 
 function initUserConfig() {
-    const paperSettings = convenience.getSettings();
+  const paperSettings = convenience.getSettings();
 
-    if (!paperSettings.get_boolean("has-installed-config-template")
-        && !hasUserConfigFile())
-    {
-        try {
-            installConfig();
+  if (
+    !paperSettings.get_boolean("has-installed-config-template") &&
+    !hasUserConfigFile()
+  ) {
+    try {
+      installConfig();
 
-            const configDir = getConfigDir().get_path();
-            const notification = notify("PaperWM", `Installed user configuration in ${configDir}`);
-            notification.connect('activated', () => {
-                imports.misc.util.spawn(["nautilus", configDir]);
-                notification.destroy();
-            });
-        } catch(e) {
-            errorNotification("PaperWM",
-                              `Failed to install user config: ${e.message}`, e.stack);
-            print("#rc", "Install failed", e.message);
-        }
-
+      const configDir = getConfigDir().get_path();
+      const notification = notify(
+        "PaperWM",
+        `Installed user configuration in ${configDir}`
+      );
+      notification.connect("activated", () => {
+        imports.misc.util.spawn(["nautilus", configDir]);
+        notification.destroy();
+      });
+    } catch (e) {
+      errorNotification(
+        "PaperWM",
+        `Failed to install user config: ${e.message}`,
+        e.stack
+      );
+      print("#rc", "Install failed", e.message);
     }
+  }
 
-    if (hasUserConfigFile()) {
-        Extension.imports.searchPath.push(getConfigDir().get_path());
-    }
+  if (hasUserConfigFile()) {
+    Extension.imports.searchPath.push(getConfigDir().get_path());
+  }
 }
 
 /**
@@ -187,20 +206,24 @@ function initUserConfig() {
  * notification
  */
 function notify(msg, details, params) {
-    const MessageTray = imports.ui.messageTray;
-    let source = new MessageTray.SystemNotificationSource();
-    // note-to-self: the source is automatically destroyed when all its
-    // notifications are removed.
-    Main.messageTray.add(source);
-    let notification = new MessageTray.Notification(source, msg, details, params);
-    notification.setResident(true); // Usually more annoying that the notification disappear than not
-    source.showNotification(notification);
-    return notification;
+  const MessageTray = imports.ui.messageTray;
+  let source = new MessageTray.SystemNotificationSource();
+  // note-to-self: the source is automatically destroyed when all its
+  // notifications are removed.
+  Main.messageTray.add(source);
+  let notification = new MessageTray.Notification(source, msg, details, params);
+  notification.setResident(true); // Usually more annoying that the notification disappear than not
+  source.showNotification(notification);
+  return notification;
 }
 
 function spawnPager(content) {
-    const quoted = GLib.shell_quote(content);
-    imports.misc.util.spawn(["sh", "-c", `echo -En ${quoted} | gedit --new-window -`]);
+  const quoted = GLib.shell_quote(content);
+  imports.misc.util.spawn([
+    "sh",
+    "-c",
+    `echo -En ${quoted} | gedit --new-window -`,
+  ]);
 }
 
 /**
@@ -208,9 +231,9 @@ function spawnPager(content) {
  * activation
  */
 function errorNotification(title, message, fullMessage) {
-    const notification = notify(title, message);
-    notification.connect('activated', () => {
-        spawnPager([title, message, "", fullMessage].join("\n"));
-        notification.destroy();
-    });
+  const notification = notify(title, message);
+  notification.connect("activated", () => {
+    spawnPager([title, message, "", fullMessage].join("\n"));
+    notification.destroy();
+  });
 }

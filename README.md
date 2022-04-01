@@ -1,4 +1,4 @@
-# PaperWM #
+# PaperWM
 
 [![project chat](https://img.shields.io/badge/zulip-join_chat-brightgreen.svg)](https://paperwm.zulipchat.com)
 
@@ -18,6 +18,7 @@ from the repository. The installer will create a link to the repo in
 `$XDG_DATA_HOME/gnome-shell/extensions/`. It will then ask if you want to apply
 the recommended settings (see [Recommended
 Settings](#recommended-gnome-shell-settings)) and lastly it will ask to enable PaperWM.
+
 ```bash
 ./install.sh # install, load and enable paperwm
 ```
@@ -31,6 +32,7 @@ possibly more stable experience you can follow the releases by checking out the
 
 Cloning the repo directly into `$XDG_DATA_HOME` also works (you can then run
 `install.sh` to enable PaperWM):
+
 ```bash
 git clone 'https://github.com/paperwm/PaperWM.git' \
     "${XDG_DATA_HOME:-$HOME/.local/share}/gnome-shell/extensions/paperwm@hedning:matrix.org"
@@ -38,9 +40,10 @@ git clone 'https://github.com/paperwm/PaperWM.git' \
 
 Running the extension will automatically install a user config file as described in [Development & user configuration](#development--user-configuration).
 
-### Note for Ubuntu users ###
+### Note for Ubuntu users
 
 There's three different gnome-desktop variants in Ubuntu:
+
 - [`ubuntu-desktop`](https://packages.ubuntu.com/focal/ubuntu-desktop): the default
 - [`ubuntu-gnome-desktop`](https://packages.ubuntu.com/focal/ubuntu-gnome-desktop):
   adds plain gnome sessions to the default
@@ -61,7 +64,7 @@ For the easiest out of the box experience we reccommend `ubuntu-gnome-desktop`.
 ([#233](https://github.com/paperwm/PaperWM/issues/233)), making it unsuitable at
 the moment.
 
-## Usage ##
+## Usage
 
 Most functionality is available using a mouse, eg. activating a window at the edge of the monitor by clicking on it. In wayland its possible to navigate with 3-finger swipes on the trackpad. But the primary focus is making an environment which works well with a keyboard.
 
@@ -73,7 +76,7 @@ Adding <kbd>Ctrl</kbd> to a keybinding will take the current window with you whe
 
 Window management and navigation is based around the three following concepts.
 
-### Scrollable window tiling ###
+### Scrollable window tiling
 
 ![The window tiling with the minimap shown](https://github.com/paperwm/media/blob/master/tiling.png)
 
@@ -90,7 +93,7 @@ Swiping the trackpad horizontally with three fingers will scroll the tiling (onl
 PaperWM doesn't handle attached modal dialogs very well, so it's best to turn it off in Gnome Tweaks (under Windows).
 
 | Keybindings                                                                                       |                                                        |
-| ------                                                                                            | -------                                                |
+| ------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
 | <kbd>Super</kbd><kbd>,</kbd> or <kbd>Super</kbd><kbd>.</kbd>                                      | Activate the next or previous window                   |
 | <kbd>Super</kbd><kbd>Left</kbd> or <kbd>Super</kbd><kbd>Right</kbd>                               | Activate the window to the left or right               |
 | <kbd>Super</kbd><kbd>Up</kbd> or <kbd>Super</kbd><kbd>Down</kbd>                                  | Activate the window above or below                     |
@@ -111,8 +114,7 @@ PaperWM doesn't handle attached modal dialogs very well, so it's best to turn it
 | <kbd>Super</kbd><kbd>I</kbd>                                                                      | Absorb the window to the right into the active column  |
 | <kbd>Super</kbd><kbd>O</kbd>                                                                      | Expel the bottom window out to the right               |
 
-
-### The workspace stack & monitors ###
+### The workspace stack & monitors
 
 Pressing <kbd>Super</kbd><kbd>Above_Tab</kbd> will slide the active workspace down revealing the stack as shown in the above screenshot. You can then flip through the most recently used workspaces with repeated <kbd>Above_Tab</kbd> presses while holding <kbd>Super</kbd> down. <kbd>Above_Tab</kbd> is the key above <kbd>Tab</kbd> (<kbd>\`</kbd> in a US qwerty layout). Like alt-tab <kbd>Shift</kbd> is added to move in reverse order:
 
@@ -133,7 +135,7 @@ There's a single scrollable tiling per workspace. Adding another monitor simply 
 PaperWM currently works best using the workspaces span monitors preference, this can be turned on with Gnome Tweaks under Workspaces. If you want to use workspaces only on primary you need to place the secondary monitor either below or above the primary (with the best result having it below).
 
 | Workspace Keybindings                                                  |                                                                                   |
-| ------                                                                 | -------                                                                           |
+| ---------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
 | <kbd>Super</kbd><kbd>Above_Tab</kbd>                                   | Cycle through the most recently used workspaces                                   |
 | <kbd>Super</kbd><kbd>Shift</kbd><kbd>Above_Tab</kbd>                   | Cycle backwards through the most recently used workspaces                         |
 | <kbd>Super</kbd><kbd>Ctrl</kbd><kbd>Above_Tab</kbd>                    | Cycle through the most recently used, taking the active window with you           |
@@ -141,13 +143,12 @@ PaperWM currently works best using the workspaces span monitors preference, this
 | <kbd>Super</kbd><kbd>Page_Down</kbd>/<kbd>Page_Up</kbd>                | Cycle sequentially through workspaces                                             |
 | <kbd>Super</kbd><kbd>Ctrl</kbd><kbd>Page_Down</kbd>/<kbd>Page_Up</kbd> | Cycle sequentially through workspaces, taking the active window with you          |
 
-
 | Monitor Keybindings                                                 |                                            |
-| ------                                                              | -------                                    |
+| ------------------------------------------------------------------- | ------------------------------------------ |
 | <kbd>Super</kbd><kbd>Shift</kbd><kbd>Arrow_key</kbd>                | Select neighbouring monitor                |
 | <kbd>Super</kbd><kbd>Shift</kbd><kbd>Ctrl</kbd><kbd>Arrow_key</kbd> | Move active window to neighbouring monitor |
 
-### Scratch layer ###
+### Scratch layer
 
 ![The floating scratch layer, with the alt tab menu open](https://github.com/paperwm/media/blob/master/scratch.png)
 
@@ -163,14 +164,14 @@ When the tiling is active <kbd>Super</kbd><kbd>Shift</kbd><kbd>Tab</kbd> selects
 <kbd>Super</kbd><kbd>Ctrl</kbd><kbd>Escape</kbd> will move a tiled window into the scratch layer or alternatively tile an already floating window. This functionality can also be accessed through the window context menu (<kbd>Alt</kbd><kbd>Space</kbd>).
 
 | Keybindings                                       |                                                                  |
-| ------                                            | -------                                                          |
+| ------------------------------------------------- | ---------------------------------------------------------------- |
 | <kbd>Super</kbd><kbd>Escape</kbd>                 | Toggle between showing and hiding the most recent scratch window |
 | <kbd>Super</kbd><kbd>Shift</kbd><kbd>Escape</kbd> | Toggle between showing and hiding the scratch windows            |
 | <kbd>Super</kbd><kbd>Ctrl</kbd><kbd>Escape</kbd>  | Toggle between floating and tiling the current window            |
 | <kbd>Super</kbd><kbd>Tab</kbd>                    | Cycle through the most recently used scratch windows             |
 | <kbd>Super</kbd><kbd>H</kbd>                      | Minimize the current window                                      |
 
-## Development & user configuration ##
+## Development & user configuration
 
 A default user configuration, `user.js`, is created in `~/.config/paperwm/` with three functions `init`, `enable` and `disable`. `init` will run only once on startup, `enable` and `disable` will be run whenever extensions are being told to disable and enable themselves. Eg. when locking the screen with <kbd>Super</kbd><kbd>L</kbd>.
 
@@ -189,10 +190,10 @@ GSETTINGS_SCHEMA_DIR=$HOME/.local/share/gnome-shell/extensions/paperwm@hedning:m
 It's possible to create simple rules for placing new windows. Currently most useful when a window should be placed in the scratch layer automatically. An example, best placed in the `init` part of `user.js`:
 
 ```javascript
-    Tiling.defwinprop({
-        wm_class: "Spotify",
-        scratch_layer: true,
-    });
+Tiling.defwinprop({
+  wm_class: "Spotify",
+  scratch_layer: true,
+});
 ```
 
 The `wm_class` of a window can be found by using looking glass: <kbd>Alt</kbd><kbd>F2</kbd> `lg` <kbd>Return</kbd> Go to the "Windows" section at the top right and find the window. X11 users can also use the `xprop` command line tool.
@@ -202,13 +203,14 @@ The `wm_class` of a window can be found by using looking glass: <kbd>Alt</kbd><k
 If opening a new application window with <kbd>Super</kbd><kbd>Return</kbd> isn't doing exactly what you want you can create custom functions to fit your needs. Say you want new emacs windows to open the current buffer by default, or have new terminals inherit the current directory:
 
 ```javascript
-    let App = Extension.imports.app;
-    App.customHandlers['emacs.desktop'] =
-        () => imports.misc.util.spawn(['emacsclient', '--eval', '(make-frame)']);
-    App.customHandlers['org.gnome.Terminal.desktop'] =
-        (metaWindow, app) => app.action_group.activate_action(
-          "win.new-terminal",
-          new imports.gi.GLib.Variant("(ss)", ["window", "current"]));
+let App = Extension.imports.app;
+App.customHandlers["emacs.desktop"] = () =>
+  imports.misc.util.spawn(["emacsclient", "--eval", "(make-frame)"]);
+App.customHandlers["org.gnome.Terminal.desktop"] = (metaWindow, app) =>
+  app.action_group.activate_action(
+    "win.new-terminal",
+    new imports.gi.GLib.Variant("(ss)", ["window", "current"])
+  );
 ```
 
 The app id of a window can be looked up like this:
@@ -221,6 +223,7 @@ app.get_id();
 ```
 
 Available application actions can be listed like this:
+
 ```javascript
 app.action_group.list_actions();
 ```
@@ -233,35 +236,39 @@ Due to limitations in the mutter keybinding API we need to steal some built in G
 
 `Extension.imports.keybindings.bindkey(keystr, name, handler, options)`
 
-Option              | Values              | Meaning
---------------------|---------------------|------------------------------------
-`activeInNavigator` | `true`, **`false`** | The keybinding is active when the minimap/navigator is open
-`opensMinimap`    | `true`, **`false`** | The minimap will open when the keybinding is invoked
+| Option              | Values              | Meaning                                                     |
+| ------------------- | ------------------- | ----------------------------------------------------------- |
+| `activeInNavigator` | `true`, **`false`** | The keybinding is active when the minimap/navigator is open |
+| `opensMinimap`      | `true`, **`false`** | The minimap will open when the keybinding is invoked        |
 
 ```javascript
 let Keybindings = Extension.imports.keybindings;
-Keybindings.bindkey("<Super>j", "my-favorite-width",
-                    (metaWindow) => {
-                        let f = metaWindow.get_frame_rect();
-                        metaWindow.move_resize_frame(true, f.x, f.y, 500, f.h);
-                    },
-                    { activeInNavigator: true });
+Keybindings.bindkey(
+  "<Super>j",
+  "my-favorite-width",
+  (metaWindow) => {
+    let f = metaWindow.get_frame_rect();
+    metaWindow.move_resize_frame(true, f.x, f.y, 500, f.h);
+  },
+  { activeInNavigator: true }
+);
 ```
 
 See `examples/keybindings.js` for more examples.
 
-## Fixed Window Size ##
+## Fixed Window Size
 
 Currently it is not possible to have a default fixed window size.
 Please check the following issues for progress / info:
 
-* https://github.com/paperwm/PaperWM/issues/304
-* https://github.com/paperwm/PaperWM/pull/189
-* https://github.com/paperwm/PaperWM/issues/311
+- https://github.com/paperwm/PaperWM/issues/304
+- https://github.com/paperwm/PaperWM/pull/189
+- https://github.com/paperwm/PaperWM/issues/311
 
-## Recommended Gnome Shell Settings ##
+## Recommended Gnome Shell Settings
 
 There's a few Gnome Shell settings which works poorly with PaperWM. Namely
+
 - `workspaces-only-on-primary`: Multi monitor support require workspaces
   spanning all monitors
 - `edge-tiling`: We don't support the native half tiled windows
@@ -270,14 +277,13 @@ There's a few Gnome Shell settings which works poorly with PaperWM. Namely
 To use the recommended settings run
 [`set-recommended-gnome-shell-settings.sh`](https://github.com/paperwm/PaperWM/blob/master/set-recommended-gnome-shell-settings.sh). A "restore previous settings" script is generated so the original settings is not lost.
 
-
-## Recommended extensions ##
+## Recommended extensions
 
 These extensions are good complements to PaperWM:
 
 - [Switcher](https://github.com/daniellandau/switcher) - combined window switcher and launcher
 - [Dash to Dock](https://micheleg.github.io/dash-to-dock/) - a great dock
 
-## Prior work ##
+## Prior work
 
 A similar idea was apparently tried out a while back: http://10gui.com/
