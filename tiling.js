@@ -2429,8 +2429,6 @@ function allocateClone(metaWindow) {
       selectionWidth = prefs.window_gap;
     }
     
-
-    
     let protrusion = Math.round(selectionWidth / 2);
     selection.x = hMax ? 0 : -protrusion;
     selection.y = vMax ? 0 : -protrusion;
