@@ -267,6 +267,11 @@ class Space extends Array {
       "changed::picture-uri-dark",
       this.updateBackground.bind(this)
     );
+    this.signals.connect(
+      settings,
+      "changed::window-selection-width",
+      this.updateSelectionWidth.bind(this)
+    );
   }
 
   show() {
@@ -1103,6 +1108,16 @@ class Space extends Array {
       "changed::show-top-bar",
       this.updateShowTopBar.bind(this)
     );
+  }
+
+  updateSelectionWidth() {
+    if (this.selectedWindow !== null) {
+      // Quick force rebuild
+      prefs.vertical_margin -= 1;
+      this.layout();
+      prefs.vertical_margin += 1;
+      this.layout();
+    }
   }
 
   updateShowTopBar() {
@@ -2408,12 +2423,20 @@ function allocateClone(metaWindow) {
     let selection = metaWindow.clone.first_child;
     let vMax = metaWindow.maximized_vertically;
     let hMax = metaWindow.maximized_horizontally;
-    let protrusion = Math.round(prefs.window_gap / 2);
+
+    let selectionWidth = prefs.window_selection_width;
+    if (selectionWidth === -1) {
+      selectionWidth = prefs.window_gap;
+    }
+    
+
+    
+    let protrusion = Math.round(selectionWidth / 2);
     selection.x = hMax ? 0 : -protrusion;
     selection.y = vMax ? 0 : -protrusion;
     selection.set_size(
-      frame.width + (hMax ? 0 : prefs.window_gap),
-      frame.height + (vMax ? 0 : prefs.window_gap)
+      frame.width + (hMax ? 0 : selectionWidth),
+      frame.height + (vMax ? 0 : selectionWidth)
     );
   }
 }

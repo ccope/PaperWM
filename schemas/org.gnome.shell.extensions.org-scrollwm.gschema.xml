@@ -293,6 +293,11 @@
       <summary>Minimum gap between windows</summary>
     </key>
 
+    <key type="i" name="window-selection-width">
+      <default>-1</default>
+      <summary>Width of the selected window frame. value -1 = Minimum gap between windows</summary>
+    </key>
+
     <key type="b" name="override-hot-corner">
         <default>true</default>
         <summary>Disable the upper left hot corner</summary>

@@ -36,6 +36,7 @@ var META_KEY_ABOVE_TAB = 0x2f7259c9;
 var prefs = {};
 [
   "window-gap",
+  "window-selection-width",
   "vertical-margin",
   "vertical-margin-bottom",
   "horizontal-margin",

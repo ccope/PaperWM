@@ -80,6 +80,14 @@ class SettingsWidget {
       this._settings.set_int("window-gap", windowGap.get_value());
     });
 
+
+    let windowSelectionWidth = this.builder.get_object("window_selection_width_spin");
+    let selectionWidth = this._settings.get_int("window-selection-width");
+    windowSelectionWidth.set_value(selectionWidth);
+    windowSelectionWidth.connect("value-changed", () => {
+      this._settings.set_int("window-selection-width", windowSelectionWidth.get_value());
+    });
+
     let hMargin = this.builder.get_object("hmargin_spinner");
     hMargin.set_value(this._settings.get_int("horizontal-margin"));
     hMargin.connect("value-changed", () => {
