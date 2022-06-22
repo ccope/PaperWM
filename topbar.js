@@ -296,17 +296,9 @@ var WorkspaceMenu = Utils.registerClass(
       this._prefItem.connect("activate", () => {
         this.menu.close(true);
         let wi = workspaceManager.get_active_workspace_index();
-        let env = GLib.get_environ();
-        env.push(`PAPERWM_PREFS_SELECTED_WORKSPACE=${wi}`);
-        try {
-          GLib.spawn_async(
-            null,
-            ["gnome-shell-extension-prefs", "paperwm@hedning:matrix.org"],
-            env,
-            GLib.SpawnFlags.SEARCH_PATH | GLib.SpawnFlags.DO_NOT_REAP_CHILD,
-            null
-          );
-        } catch (e) {}
+        let temp_file = Gio.File.new_for_path(GLib.get_tmp_dir()).get_child('paperwm.workspace')
+        temp_file.replace_contents(wi.toString(), null, false, Gio.FileCreateFlags.REPLACE_DESTINATION, null)
+        imports.misc.extensionUtils.openPrefs()
       });
 
       // this.iconBox = new St.BoxLayout();
@@ -589,11 +581,9 @@ function enable() {
       space.label.clutter_text.set_font_description(fontDescription);
     }
   }
-  // TheSola10: drop the modified Activities button since D2P can't
-  /*
+
   Main.panel.addToStatusArea("WorkspaceMenu", menu, 0, "left");
   menu.actor.show();
-  */
 
   // Force transparency
   panel.set_style("background-color: rgba(0, 0, 0, 0.35);");
