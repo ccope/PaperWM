@@ -41,6 +41,9 @@ var prefs = Settings.prefs;
 var backgroundSettings = new Gio.Settings({
   schema_id: "org.gnome.desktop.background",
 });
+var interfaceSettings = new Gio.Settings({
+  schema_id: "org.gnome.desktop.interface",
+});
 
 var borderWidth = 8;
 // Mutter prevints windows from being placed further off the screen than 75 pixels.
@@ -240,6 +243,11 @@ var Space = class Space extends Array {
     const Convenience = Extension.imports.convenience;
     const settings = Convenience.getSettings();
     this.signals.connect(
+      interfaceSettings,
+      "changed::color-scheme",
+      this.updateBackground.bind(this)
+    );
+    this.signals.connect(
       settings,
       "changed::default-background",
       this.updateBackground.bind(this)
@@ -252,6 +260,11 @@ var Space = class Space extends Array {
     this.signals.connect(
       backgroundSettings,
       "changed::picture-uri",
+      this.updateBackground.bind(this)
+    );
+    this.signals.connect(
+      backgroundSettings,
+      "changed::picture-uri-dark",
       this.updateBackground.bind(this)
     );
   }
@@ -1132,7 +1145,11 @@ box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, .7);
     const BackgroundStyle = imports.gi.GDesktopEnums.BackgroundStyle;
     let style = BackgroundStyle.ZOOM;
     if (!path && useDefault) {
-      path = backgroundSettings.get_string("picture-uri");
+      if (interfaceSettings.get_string("color-scheme") === "default") {
+        path = backgroundSettings.get_string("picture-uri");
+      } else {
+        path = backgroundSettings.get_string("picture-uri-dark");
+      }
     }
 
     let file = Gio.File.new_for_commandline_arg(path);
