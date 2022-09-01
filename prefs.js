@@ -59,15 +59,22 @@ var SettingsWidget = class SettingsWidget {
        selectedWorkspace: index of initially selected workspace in workspace settings tab
        selectedTab: index of initially shown tab
      */
-  constructor(selectedTab = 0, selectedWorkspace = 0) {
+  constructor(prefsWindow, selectedPage = 0, selectedWorkspace = 0) {
     this._settings = Convenience.getSettings();
 
     this.builder = Gtk.Builder.new_from_file(Extension.path + "/Settings.ui");
+    this.window = prefsWindow;
+
+    const pages = [
+      this.builder.get_object('general_page'),
+      this.builder.get_object('workspaces_page'),
+      this.builder.get_object('keybindings_page')
+    ];
+
+    pages.forEach(page => prefsWindow.add(page))
+    prefsWindow.set_visible_page(pages[selectedPage])
 
     this.aboutButton = this.builder.get_object("about_button");
-    this.switcher = this.builder.get_object("switcher");
-    this.widget = this.builder.get_object("paperwm_settings");
-    this.widget.pages.select_item(selectedTab, true);
     this._backgroundFilter = new Gtk.FileFilter();
     this._backgroundFilter.add_pixbuf_formats();
 
@@ -253,7 +260,7 @@ var SettingsWidget = class SettingsWidget {
         filter: this._backgroundFilter,
         select_multiple: false,
         modal: true,
-        transient_for: this.widget.get_root(),
+        transient_for: this.window.get_root(),
       }
     );
     let clearBackground = new Gtk.Button({
@@ -279,7 +286,7 @@ var SettingsWidget = class SettingsWidget {
         title: "Select workspace background",
         select_multiple: false,
         modal: true,
-        transient_for: this.widget.get_root(),
+        transient_for: this.window.get_root(),
       }
     );
     let clearDirectory = new Gtk.Button({
@@ -766,20 +773,20 @@ function init() {
   );
 }
 
-function buildPrefsWidget() {
-  let selectedWorkspace = GLib.getenv("PAPERWM_PREFS_SELECTED_WORKSPACE");
-  let selectedTab = 0;
-  if (selectedWorkspace) {
-    selectedTab = 1;
-  }
-  let settings = new SettingsWidget(selectedTab, selectedWorkspace || 0);
-  GLib.idle_add(GLib.PRIORITY_DEFAULT_IDLE, () => {
-    let window = settings.widget.get_root();
-    window.modal = false;
-    let headerbar = window.get_titlebar();
-    headerbar.pack_start(settings.aboutButton);
-    headerbar.set_title_widget(settings.switcher);
-    return false;
-  });
-  return settings.widget;
+function fillPreferencesWindow(window) {
+  let selectedWorkspace = null;
+  try {
+    const tempFile = Gio.File.new_for_path(GLib.get_tmp_dir()).get_child('paperwm.workspace');
+    [, contents] = tempFile.load_contents(null);
+    const decoder = new TextDecoder('utf-8');
+    const contentsString = decoder.decode(contents);
+    let workspaceN = parseInt(contentsString);
+    if (!isNaN(workspaceN)) {
+      selectedWorkspace = workspaceN;
+    }
+    tempFile.delete(null);
+  } catch (e) {}
+
+  let selectedTab = selectedWorkspace !== null ? 1 : 0;
+  new SettingsWidget(window, selectedTab, selectedWorkspace || 0);
 }
